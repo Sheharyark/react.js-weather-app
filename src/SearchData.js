@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import './SearchData.css'
+import SpinnerLoading from './Components/SpinnerLoading'
 
 const key = 'fbf712a5a83d7305c3cda4ca8fe7ef29'
 function SearchData() {
@@ -12,15 +13,17 @@ function SearchData() {
   const handleSubmit = (e) => {
     setIsLoading(true)
     e.preventDefault()
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${key}&units=metric`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setWeatherData(data)
-        console.log(data)
-      })
-      .catch((err) => setError(error.message))
+    setTimeout(() => {
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${key}&units=metric`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setWeatherData(data)
+          console.log(data)
+        })
+        .catch((err) => setError(error.message))
+    }, 1000)
     setIsLoading(false)
   }
 
@@ -38,7 +41,7 @@ function SearchData() {
         </div>
         <button type='submit'>Get Weather</button>
       </form>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <SpinnerLoading />}
       {weatherData && (
         <div className='weatherData'>
           <h2>Weather for {weatherData.name}</h2>
